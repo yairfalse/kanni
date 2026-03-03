@@ -73,7 +73,10 @@ pub fn repo_diff_file(
             _ => return true, // Skip file headers etc.
         };
 
-        let content = String::from_utf8_lossy(line.content()).to_string();
+        let content = String::from_utf8_lossy(line.content())
+            .trim_end_matches('\n')
+            .trim_end_matches('\r')
+            .to_string();
 
         if let Some(hunk_header) = hunk {
             let header = format!(

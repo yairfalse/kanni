@@ -8,7 +8,7 @@ defmodule KanniWeb.Components.ContextPanel do
 
   attr :selected_repo, :map, default: nil
   attr :context, :string, default: nil
-  attr :kerto_status, :map, default: nil
+  attr :kerto_status, :map, default: %{}
   attr :plugin_panels, :list, default: []
 
   def context_panel(assigns) do

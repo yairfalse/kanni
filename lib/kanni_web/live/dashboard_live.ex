@@ -44,7 +44,11 @@ defmodule KanniWeb.DashboardLive do
 
   @impl true
   def handle_params(%{"repo" => path}, _uri, socket) when path != "" do
-    {:noreply, select_repo(socket, path)}
+    if valid_repo_path?(path, socket.assigns.repos) do
+      {:noreply, select_repo(socket, path)}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_params(_params, _uri, socket) do
@@ -267,8 +271,22 @@ defmodule KanniWeb.DashboardLive do
     end)
   end
 
+  defp valid_repo_path?(path, repos) do
+    Enum.any?(repos, &(&1.path == path)) or
+      match?([{_, _}], Registry.lookup(Kanni.Repo.Registry, path))
+  end
+
   defp collect_plugin_panels do
     Kanni.Plugin.Registry.panel_providers()
-    |> Enum.flat_map(fn mod -> mod.panels() end)
+    |> Enum.flat_map(fn mod ->
+      try do
+        mod.panels()
+      rescue
+        e ->
+          require Logger
+          Logger.warning("Plugin #{inspect(mod)} panels/0 failed: #{Exception.message(e)}")
+          []
+      end
+    end)
   end
 end

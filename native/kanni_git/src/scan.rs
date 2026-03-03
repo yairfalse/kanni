@@ -8,7 +8,7 @@ struct RepoEntry {
     name: String,
 }
 
-/// Walk a directory tree up to `max_depth` looking for `.git` directories.
+/// Walk a directory tree up to `max_depth` looking for directories that contain `.git`.
 /// Returns a JSON array of `{path, name}` objects.
 #[rustler::nif(schedule = "DirtyCpu")]
 pub fn workspace_scan(root: String, max_depth: usize) -> NifResult<String> {
@@ -22,14 +22,13 @@ pub fn workspace_scan(root: String, max_depth: usize) -> NifResult<String> {
     }
 
     let walker = walkdir::WalkDir::new(&root)
-        .max_depth(max_depth + 1) // +1 because we look for .git inside dirs
+        .max_depth(max_depth)
         .follow_links(false)
         .into_iter()
         .filter_entry(|e| {
             let name = e.file_name().to_string_lossy();
-            // Skip hidden dirs (except .git which we're looking for)
-            // Skip node_modules, target, _build etc.
-            if e.depth() > 0 && name.starts_with('.') && name != ".git" {
+            // Skip all hidden dirs and common large directories
+            if e.depth() > 0 && name.starts_with('.') {
                 return false;
             }
             if name == "node_modules" || name == "target" || name == "_build" || name == "deps" {
@@ -44,19 +43,24 @@ pub fn workspace_scan(root: String, max_depth: usize) -> NifResult<String> {
             Err(_) => continue,
         };
 
-        if entry.file_name() == ".git" && entry.file_type().is_dir() {
-            if let Some(parent) = entry.path().parent() {
-                let repo_path = parent.to_string_lossy().to_string();
-                let name = parent
-                    .file_name()
-                    .map(|n| n.to_string_lossy().to_string())
-                    .unwrap_or_else(|| repo_path.clone());
+        if !entry.file_type().is_dir() {
+            continue;
+        }
 
-                repos.push(RepoEntry {
-                    path: repo_path,
-                    name,
-                });
-            }
+        // Check if this directory contains a .git subdirectory
+        let git_dir = entry.path().join(".git");
+        if git_dir.is_dir() {
+            let repo_path = entry.path().to_string_lossy().to_string();
+            let name = entry
+                .path()
+                .file_name()
+                .map(|n| n.to_string_lossy().to_string())
+                .unwrap_or_else(|| repo_path.clone());
+
+            repos.push(RepoEntry {
+                path: repo_path,
+                name,
+            });
         }
     }
 

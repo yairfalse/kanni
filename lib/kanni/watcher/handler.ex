@@ -54,8 +54,19 @@ defmodule Kanni.Watcher.Handler do
         {:reply, :ok, state}
 
       {pid, watchers} ->
+        # Cancel pending debounce timers for files under this repo
+        debounce_timers =
+          Enum.reduce(state.debounce_timers, %{}, fn {file_path, ref}, acc ->
+            if String.starts_with?(file_path, path) do
+              Process.cancel_timer(ref)
+              acc
+            else
+              Map.put(acc, file_path, ref)
+            end
+          end)
+
         GenServer.stop(pid)
-        {:reply, :ok, %{state | watchers: watchers}}
+        {:reply, :ok, %{state | watchers: watchers, debounce_timers: debounce_timers}}
     end
   end
 
@@ -93,7 +104,7 @@ defmodule Kanni.Watcher.Handler do
   defp should_broadcast?(path) do
     basename = Path.basename(path)
     # Skip .git internals, editor temp files, OS files
-    not String.contains?(path, "/.git/") and
+    ".git" not in Path.split(path) and
       basename != ".DS_Store" and
       not String.ends_with?(basename, "~") and
       not String.ends_with?(basename, ".swp") and

@@ -29,11 +29,11 @@ defmodule KanniWeb.Components.ReposPanel do
             <span class="kanni-repo-branch">{repo[:branch] || "—"}</span>
           </div>
           <div class="kanni-repo-meta">
-            <span :if={repo[:dirty_count] > 0} class="kanni-dirty-count">
+            <span :if={Map.get(repo, :dirty_count, 0) > 0} class="kanni-dirty-count">
               {repo.dirty_count}
             </span>
-            <span :if={repo[:ahead] > 0} class="kanni-ahead">↑{repo.ahead}</span>
-            <span :if={repo[:behind] > 0} class="kanni-behind">↓{repo.behind}</span>
+            <span :if={Map.get(repo, :ahead, 0) > 0} class="kanni-ahead">↑{repo.ahead}</span>
+            <span :if={Map.get(repo, :behind, 0) > 0} class="kanni-behind">↓{repo.behind}</span>
           </div>
         </div>
         <div :if={@repos == []} class="kanni-empty">

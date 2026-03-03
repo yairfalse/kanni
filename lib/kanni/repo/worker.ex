@@ -163,6 +163,12 @@ defmodule Kanni.Repo.Worker do
     {:keep_state, data}
   end
 
+  @impl true
+  def terminate(_reason, _state, data) do
+    Kanni.Watcher.Handler.unwatch_repo(data.path)
+    :ok
+  end
+
   # Private
 
   defp do_refresh(data) do
@@ -197,7 +203,13 @@ defmodule Kanni.Repo.Worker do
     case Kanni.Git.Native.repo_status(data.handle) do
       json when is_binary(json) ->
         case Jason.decode(json) do
-          {:ok, statuses} ->
+          {:ok, statuses} when is_map(statuses) ->
+            staged = length(Map.get(statuses, "staged", []))
+            unstaged = length(Map.get(statuses, "unstaged", []))
+            untracked = length(Map.get(statuses, "untracked", []))
+            %{data | dirty_count: staged + unstaged + untracked}
+
+          {:ok, statuses} when is_list(statuses) ->
             %{data | dirty_count: length(statuses)}
 
           _ ->

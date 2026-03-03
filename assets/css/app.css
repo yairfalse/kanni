@@ -23,7 +23,7 @@
   on Elixir colors. Build your own at: https://daisyui.com/theme-generator/ */
 @plugin "../vendor/daisyui-theme" {
   name: "dark";
-  default: false;
+  default: true;
   prefersdark: true;
   color-scheme: "dark";
   --color-base-100: oklch(30.33% 0.016 252.42);
@@ -56,41 +56,6 @@
   --noise: 0;
 }
 
-@plugin "../vendor/daisyui-theme" {
-  name: "light";
-  default: true;
-  prefersdark: false;
-  color-scheme: "light";
-  --color-base-100: oklch(98% 0 0);
-  --color-base-200: oklch(96% 0.001 286.375);
-  --color-base-300: oklch(92% 0.004 286.32);
-  --color-base-content: oklch(21% 0.006 285.885);
-  --color-primary: oklch(70% 0.213 47.604);
-  --color-primary-content: oklch(98% 0.016 73.684);
-  --color-secondary: oklch(55% 0.027 264.364);
-  --color-secondary-content: oklch(98% 0.002 247.839);
-  --color-accent: oklch(0% 0 0);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(44% 0.017 285.786);
-  --color-neutral-content: oklch(98% 0 0);
-  --color-info: oklch(62% 0.214 259.815);
-  --color-info-content: oklch(97% 0.014 254.604);
-  --color-success: oklch(70% 0.14 182.503);
-  --color-success-content: oklch(98% 0.014 180.72);
-  --color-warning: oklch(66% 0.179 58.318);
-  --color-warning-content: oklch(98% 0.022 95.277);
-  --color-error: oklch(58% 0.253 17.585);
-  --color-error-content: oklch(96% 0.015 12.422);
-  --radius-selector: 0.25rem;
-  --radius-field: 0.25rem;
-  --radius-box: 0.5rem;
-  --size-selector: 0.21875rem;
-  --size-field: 0.21875rem;
-  --border: 1.5px;
-  --depth: 1;
-  --noise: 0;
-}
-
 /* Add variants based on LiveView classes */
 @custom-variant phx-click-loading (.phx-click-loading&, .phx-click-loading &);
 @custom-variant phx-submit-loading (.phx-submit-loading&, .phx-submit-loading &);
@@ -102,177 +67,349 @@
 /* Make LiveView wrapper divs transparent for layout */
 [data-phx-session], [data-phx-teleported-src] { display: contents }
 
-/* This file is for your main application CSS */
+/* ═══════════════════════════════════════════════════════════════
+   Känni — Terminal Luxe
+   ═══════════════════════════════════════════════════════════════ */
 
-/* Känni color system */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
 :root {
-  --kanni-bg: #0a0a0f;
-  --kanni-surface: #12121a;
-  --kanni-border: #1e1e2e;
-  --kanni-text: #e0e0e8;
-  --kanni-text-dim: #6b6b80;
-  --kanni-accent: #00ff88;
-  --kanni-accent-dim: rgba(0, 255, 136, 0.15);
+  /* Surfaces — layered depth, blue-black base */
+  --k-void: #06070b;
+  --k-bg: #0b0d14;
+  --k-surface-0: #10131c;
+  --k-surface-1: #151924;
+  --k-surface-2: #1a1f2e;
+  --k-surface-3: #212738;
+
+  /* Borders — subtle, cool-tinted */
+  --k-border: rgba(255, 255, 255, 0.06);
+  --k-border-strong: rgba(255, 255, 255, 0.10);
+  --k-border-accent: rgba(45, 255, 160, 0.20);
+
+  /* Text — warm off-whites */
+  --k-text: #d8dce8;
+  --k-text-secondary: #8b90a0;
+  --k-text-dim: #555972;
+  --k-text-ghost: #363a4a;
+
+  /* Accent — refined minty green */
+  --k-accent: #2dffa0;
+  --k-accent-soft: rgba(45, 255, 160, 0.12);
+  --k-accent-glow: rgba(45, 255, 160, 0.06);
+
+  /* Semantic */
+  --k-warning: #f0b060;
+  --k-warning-soft: rgba(240, 176, 96, 0.10);
+  --k-danger: #f06070;
+  --k-danger-soft: rgba(240, 96, 112, 0.10);
+  --k-info: #60a0f0;
+  --k-info-soft: rgba(96, 160, 240, 0.10);
+  --k-purple: #a78bfa;
+  --k-purple-soft: rgba(167, 139, 250, 0.10);
 
   /* Branch lane palette */
-  --kanni-lane-0: #00ff88;
-  --kanni-lane-1: #ff6b6b;
+  --kanni-lane-0: #2dffa0;
+  --kanni-lane-1: #f06070;
   --kanni-lane-2: #4ecdc4;
-  --kanni-lane-3: #ffe66d;
+  --kanni-lane-3: #f0b060;
   --kanni-lane-4: #a78bfa;
   --kanni-lane-5: #f472b6;
-  --kanni-lane-6: #38bdf8;
+  --kanni-lane-6: #60a0f0;
   --kanni-lane-7: #fb923c;
+
+  /* Typography */
+  --k-font: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
+  --k-leading: 1.6;
+
+  /* Spacing scale */
+  --k-gap-xs: 0.25rem;
+  --k-gap-sm: 0.5rem;
+  --k-gap-md: 0.75rem;
+  --k-gap-lg: 1rem;
+  --k-gap-xl: 1.5rem;
+
+  /* Radii */
+  --k-radius-sm: 4px;
+  --k-radius-md: 6px;
+  --k-radius-lg: 8px;
+
+  /* Transitions */
+  --k-ease: cubic-bezier(0.22, 0.68, 0, 1);
+  --k-duration: 180ms;
 }
 
-/* Shell — full-page three-panel layout */
-html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+/* ── Reset & Base ────────────────────────────────────────────── */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--k-void);
+}
+
+::selection {
+  background: var(--k-accent-soft);
+  color: var(--k-accent);
+}
+
+/* Subtle scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--k-border-strong);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--k-text-dim);
+}
+
+/* ── Shell ───────────────────────────────────────────────────── */
 
 .kanni-shell {
-  background: var(--kanni-bg);
-  color: var(--kanni-text);
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+  background: var(--k-bg);
+  color: var(--k-text);
+  font-family: var(--k-font);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: var(--k-leading);
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr;
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Header ──────────────────────────────────────────────────── */
+
 .kanni-header {
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--kanni-border);
+  padding: 0.625rem var(--k-gap-lg);
+  border-bottom: 1px solid var(--k-border);
   display: flex;
   align-items: baseline;
-  gap: 0.75rem;
+  gap: var(--k-gap-md);
+  background: linear-gradient(180deg, var(--k-surface-0) 0%, var(--k-bg) 100%);
+  position: relative;
+}
+
+/* Subtle accent glow under header */
+.kanni-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--k-accent) 30%,
+    var(--k-accent) 70%,
+    transparent 100%
+  );
+  opacity: 0.15;
 }
 
 .kanni-logo {
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 700;
-  color: var(--kanni-accent);
+  color: var(--k-accent);
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px var(--k-accent-soft);
 }
 
 .kanni-tagline {
-  font-size: 0.75rem;
-  color: var(--kanni-text-dim);
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--k-text-dim);
+  letter-spacing: 0.04em;
 }
+
+/* ── Panel Grid ──────────────────────────────────────────────── */
 
 .kanni-panels {
   display: grid;
-  grid-template-columns: 220px 1fr 260px;
+  grid-template-columns: 232px 1fr 272px;
   overflow: hidden;
 }
 
-/* Repos panel (left) */
-.kanni-repos-panel {
-  border-right: 1px solid var(--kanni-border);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+/* ── Panel shared ────────────────────────────────────────────── */
 
 .kanni-panel-header {
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--kanni-border);
+  padding: var(--k-gap-sm) var(--k-gap-md);
+  border-bottom: 1px solid var(--k-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
+  background: var(--k-surface-0);
 }
 
 .kanni-panel-title {
-  font-size: 0.7rem;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--kanni-text-dim);
+  letter-spacing: 0.1em;
+  color: var(--k-text-dim);
 }
 
 .kanni-panel-count {
-  font-size: 0.65rem;
-  color: var(--kanni-text-dim);
-  background: var(--kanni-surface);
-  padding: 0.1rem 0.4rem;
-  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--k-text-dim);
+  background: var(--k-surface-2);
+  padding: 1px 6px;
+  border-radius: var(--k-radius-sm);
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ── Repos Panel (left) ──────────────────────────────────────── */
+
+.kanni-repos-panel {
+  border-right: 1px solid var(--k-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--k-surface-0);
 }
 
 .kanni-repo-list {
   overflow-y: auto;
   flex: 1;
+  padding: var(--k-gap-xs) 0;
 }
 
 .kanni-repo-item {
-  padding: 0.4rem 0.75rem;
+  padding: 6px var(--k-gap-md);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 10px;
   cursor: pointer;
-  transition: background 0.1s;
-  font-size: 0.8rem;
+  transition: background var(--k-duration) var(--k-ease);
+  position: relative;
+  margin: 1px 4px;
+  border-radius: var(--k-radius-sm);
 }
 
 .kanni-repo-item:hover {
-  background: var(--kanni-surface);
+  background: var(--k-surface-2);
 }
 
 .kanni-repo-item.selected {
-  background: var(--kanni-surface);
-  border-left: 2px solid var(--kanni-accent);
-  padding-left: calc(0.75rem - 2px);
+  background: var(--k-surface-2);
+}
+
+/* Accent bar for selected repo */
+.kanni-repo-item.selected::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--k-accent);
+  border-radius: 1px;
+  box-shadow: 0 0 8px var(--k-accent-soft);
 }
 
 .kanni-status-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
+  transition: box-shadow var(--k-duration) var(--k-ease);
 }
 
-.kanni-status-dot.clean { background: var(--kanni-accent); }
-.kanni-status-dot.dirty { background: #ffe66d; }
-.kanni-status-dot.error { background: #ff6b6b; }
+.kanni-status-dot.clean {
+  background: var(--k-accent);
+  box-shadow: 0 0 4px var(--k-accent-soft);
+}
+
+.kanni-status-dot.dirty {
+  background: var(--k-warning);
+  box-shadow: 0 0 4px var(--k-warning-soft);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+.kanni-status-dot.error {
+  background: var(--k-danger);
+  box-shadow: 0 0 4px var(--k-danger-soft);
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
 .kanni-repo-info {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 1px;
 }
 
 .kanni-repo-name {
+  font-size: 12px;
   font-weight: 500;
-  color: var(--kanni-text);
+  color: var(--k-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .kanni-repo-branch {
-  font-size: 0.65rem;
-  color: var(--kanni-text-dim);
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--k-text-dim);
+  letter-spacing: 0.02em;
 }
 
 .kanni-repo-meta {
   display: flex;
-  gap: 0.3rem;
-  font-size: 0.65rem;
-  color: var(--kanni-text-dim);
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
   flex-shrink: 0;
+  align-items: center;
 }
 
 .kanni-dirty-count {
-  color: #ffe66d;
+  color: var(--k-warning);
+  background: var(--k-warning-soft);
+  padding: 0 4px;
+  border-radius: 3px;
+  font-size: 10px;
 }
 
-.kanni-ahead { color: var(--kanni-accent); }
-.kanni-behind { color: #ff6b6b; }
+.kanni-ahead {
+  color: var(--k-accent);
+  font-size: 10px;
+}
 
-/* Focus panel (center) */
+.kanni-behind {
+  color: var(--k-danger);
+  font-size: 10px;
+}
+
+/* ── Focus Panel (center) ────────────────────────────────────── */
+
 .kanni-focus-panel {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: var(--k-bg);
 }
 
 .kanni-focus-content {
@@ -284,35 +421,41 @@ html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
 
 .kanni-tab-bar {
   display: flex;
-  border-bottom: 1px solid var(--kanni-border);
+  border-bottom: 1px solid var(--k-border);
   flex-shrink: 0;
+  background: var(--k-surface-0);
+  gap: 2px;
+  padding: 0 var(--k-gap-sm);
 }
 
 .kanni-tab {
-  padding: 0.4rem 1rem;
-  font-size: 0.75rem;
-  color: var(--kanni-text-dim);
+  padding: 8px 14px 7px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--k-text-dim);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
   font-family: inherit;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color var(--k-duration) var(--k-ease),
+              border-color var(--k-duration) var(--k-ease);
+  letter-spacing: 0.02em;
 }
 
 .kanni-tab:hover {
-  color: var(--kanni-text);
+  color: var(--k-text-secondary);
 }
 
 .kanni-tab.active {
-  color: var(--kanni-accent);
-  border-bottom-color: var(--kanni-accent);
+  color: var(--k-accent);
+  border-bottom-color: var(--k-accent);
 }
 
 .kanni-tab-content {
   flex: 1;
   overflow-y: auto;
-  padding: 0.75rem;
+  padding: var(--k-gap-md);
 }
 
 .kanni-focus-empty {
@@ -325,50 +468,63 @@ html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
 .kanni-empty-message,
 .kanni-empty,
 .kanni-placeholder {
-  color: var(--kanni-text-dim);
-  font-size: 0.8rem;
-  padding: 1rem;
+  color: var(--k-text-dim);
+  font-size: 12px;
+  padding: var(--k-gap-lg);
   text-align: center;
+  font-weight: 300;
+  letter-spacing: 0.02em;
 }
 
-/* Context panel (right) */
+/* ── Context Panel (right) ───────────────────────────────────── */
+
 .kanni-context-panel {
-  border-left: 1px solid var(--kanni-border);
+  border-left: 1px solid var(--k-border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: var(--k-surface-0);
 }
 
 .kanni-context-content {
   flex: 1;
   overflow-y: auto;
-  padding: 0.75rem;
+  padding: var(--k-gap-md);
 }
 
 .kanni-context-rendered {
-  font-size: 0.72rem;
+  font-size: 12px;
 }
 
 .kanni-context-text {
   white-space: pre-wrap;
   word-break: break-word;
   font-family: inherit;
-  font-size: 0.72rem;
-  line-height: 1.5;
-  color: var(--kanni-text);
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--k-text);
   margin: 0;
 }
 
 .kanni-kerto-status {
-  font-size: 0.6rem;
-  color: var(--kanni-text-dim);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--k-text-dim);
+  letter-spacing: 0.02em;
 }
 
-/* Changes view */
+.kanni-no-plugins {
+  color: var(--k-text-ghost);
+  font-style: italic;
+}
+
+/* ── Changes View ────────────────────────────────────────────── */
+
 .kanni-changes {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--k-gap-sm);
 }
 
 .kanni-file-lists {
@@ -377,294 +533,483 @@ html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
 }
 
 .kanni-file-section {
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--k-gap-xs);
 }
 
 .kanni-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid var(--kanni-border);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--k-border);
+  margin-bottom: 2px;
 }
 
 .kanni-section-title {
-  font-size: 0.65rem;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--kanni-text-dim);
+  letter-spacing: 0.1em;
+  color: var(--k-text-dim);
 }
 
 .kanni-section-count {
-  font-size: 0.6rem;
-  color: var(--kanni-text-dim);
+  font-size: 10px;
+  color: var(--k-text-dim);
+}
+
+.kanni-section-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .kanni-file-entry {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.2rem 0.25rem;
+  gap: 8px;
+  padding: 3px 6px;
   cursor: pointer;
-  font-size: 0.75rem;
-  border-radius: 3px;
+  font-size: 12px;
+  border-radius: var(--k-radius-sm);
+  transition: background var(--k-duration) var(--k-ease);
 }
 
-.kanni-file-entry:hover { background: var(--kanni-surface); }
-.kanni-file-entry.selected { background: var(--kanni-accent-dim); }
+.kanni-file-entry:hover {
+  background: var(--k-surface-1);
+}
+
+.kanni-file-entry.selected {
+  background: var(--k-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--k-border-accent);
+}
 
 .kanni-file-status {
-  font-size: 0.7rem;
+  font-size: 11px;
   font-weight: 600;
-  width: 1rem;
+  width: 14px;
   text-align: center;
   flex-shrink: 0;
 }
 
-.kanni-file-status.added, .kanni-file-status.new { color: var(--kanni-accent); }
-.kanni-file-status.modified { color: #ffe66d; }
-.kanni-file-status.deleted { color: #ff6b6b; }
-.kanni-file-status.renamed { color: #a78bfa; }
+.kanni-file-status.added,
+.kanni-file-status.new { color: var(--k-accent); }
+.kanni-file-status.modified { color: var(--k-warning); }
+.kanni-file-status.deleted { color: var(--k-danger); }
+.kanni-file-status.renamed { color: var(--k-purple); }
 
 .kanni-file-path {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* Diff viewer */
-.kanni-diff {
-  margin-top: 0.5rem;
-  border: 1px solid var(--kanni-border);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.kanni-diff-header {
-  padding: 0.3rem 0.5rem;
-  background: var(--kanni-surface);
-  border-bottom: 1px solid var(--kanni-border);
-  font-size: 0.7rem;
-  color: var(--kanni-text-dim);
-}
-
-.kanni-hunk { border-bottom: 1px solid var(--kanni-border); }
-.kanni-hunk:last-child { border-bottom: none; }
-
-.kanni-hunk-header {
-  padding: 0.15rem 0.5rem;
-  background: rgba(0, 255, 136, 0.05);
-  font-size: 0.65rem;
-  color: var(--kanni-text-dim);
-}
-
-.kanni-hunk-lines { font-size: 0.72rem; }
-
-.kanni-diff-line {
-  display: flex;
-  line-height: 1.5;
-  white-space: pre;
-}
-
-.kanni-diff-line.addition { background: rgba(0, 255, 136, 0.08); }
-.kanni-diff-line.deletion { background: rgba(255, 107, 107, 0.08); }
-
-.kanni-lineno {
-  width: 3rem;
-  text-align: right;
-  padding-right: 0.5rem;
-  color: var(--kanni-text-dim);
-  font-size: 0.65rem;
-  flex-shrink: 0;
-  user-select: none;
-}
-
-.kanni-line-origin {
-  width: 1rem;
-  text-align: center;
-  flex-shrink: 0;
-  color: var(--kanni-text-dim);
-}
-
-.kanni-diff-line.addition .kanni-line-origin { color: var(--kanni-accent); }
-.kanni-diff-line.deletion .kanni-line-origin { color: #ff6b6b; }
-
-.kanni-line-content {
-  flex: 1;
-  padding-right: 0.5rem;
-}
-
-.kanni-diff-area {
-  overflow-y: auto;
-  max-height: 50vh;
-}
-
-/* Activity stream */
-.kanni-activity {
-  font-size: 0.72rem;
-}
-
-.kanni-activity-event {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.2rem 0;
-  border-bottom: 1px solid var(--kanni-border);
-  align-items: baseline;
-}
-
-.kanni-activity-time {
-  color: var(--kanni-text-dim);
-  font-size: 0.65rem;
-  flex-shrink: 0;
-  width: 4rem;
-}
-
-.kanni-activity-repo {
-  color: var(--kanni-accent);
-  flex-shrink: 0;
-  width: 8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.kanni-activity-path {
-  color: var(--kanni-text);
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.kanni-activity-events {
-  color: var(--kanni-text-dim);
-  font-size: 0.6rem;
-  flex-shrink: 0;
-}
-
-/* Action buttons */
-.kanni-action-btn {
-  font-size: 0.6rem;
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
-  border: 1px solid var(--kanni-border);
-  background: transparent;
-  color: var(--kanni-text-dim);
-  cursor: pointer;
-  font-family: inherit;
-  transition: all 0.15s;
-}
-
-.kanni-action-btn:hover {
-  border-color: var(--kanni-accent);
-  color: var(--kanni-accent);
+  font-weight: 400;
 }
 
 .kanni-file-action {
   opacity: 0;
   margin-left: auto;
+  transition: opacity var(--k-duration) var(--k-ease);
 }
 
-.kanni-file-entry:hover .kanni-file-action { opacity: 1; }
+.kanni-file-entry:hover .kanni-file-action {
+  opacity: 1;
+}
 
-.kanni-section-actions {
+/* ── Action Buttons ──────────────────────────────────────────── */
+
+.kanni-action-btn {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: var(--k-radius-sm);
+  border: 1px solid var(--k-border-strong);
+  background: var(--k-surface-1);
+  color: var(--k-text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--k-duration) var(--k-ease);
+  letter-spacing: 0.02em;
+}
+
+.kanni-action-btn:hover {
+  border-color: var(--k-border-accent);
+  color: var(--k-accent);
+  background: var(--k-accent-glow);
+}
+
+/* ── Diff Viewer ─────────────────────────────────────────────── */
+
+.kanni-diff {
+  margin-top: var(--k-gap-sm);
+  border: 1px solid var(--k-border-strong);
+  border-radius: var(--k-radius-md);
+  overflow: hidden;
+  background: var(--k-surface-0);
+}
+
+.kanni-diff-header {
+  padding: 6px 10px;
+  background: var(--k-surface-1);
+  border-bottom: 1px solid var(--k-border);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--k-text-secondary);
+  letter-spacing: 0.01em;
+}
+
+.kanni-hunk {
+  border-bottom: 1px solid var(--k-border);
+}
+
+.kanni-hunk:last-child {
+  border-bottom: none;
+}
+
+.kanni-hunk-header {
+  padding: 3px 10px;
+  background: var(--k-accent-glow);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--k-text-dim);
+  border-bottom: 1px solid var(--k-border);
+}
+
+.kanni-hunk-lines {
+  font-size: 12px;
+}
+
+.kanni-diff-line {
   display: flex;
-  align-items: center;
-  gap: 0.4rem;
+  line-height: 1.55;
+  white-space: pre;
+  transition: background 80ms ease;
 }
 
-/* Commit form */
+.kanni-diff-line:hover {
+  background: var(--k-surface-2);
+}
+
+.kanni-diff-line.addition:hover,
+.kanni-diff-line.deletion:hover {
+  background: var(--k-surface-2);
+}
+
+.kanni-diff-line.addition {
+  background: rgba(45, 255, 160, 0.05);
+}
+
+.kanni-diff-line.deletion {
+  background: rgba(240, 96, 112, 0.05);
+}
+
+.kanni-diff-line.context {
+  background: transparent;
+}
+
+.kanni-lineno {
+  width: 42px;
+  text-align: right;
+  padding-right: 8px;
+  color: var(--k-text-ghost);
+  font-size: 11px;
+  flex-shrink: 0;
+  user-select: none;
+  border-right: 1px solid var(--k-border);
+}
+
+.kanni-lineno + .kanni-lineno {
+  border-right: none;
+  padding-left: 4px;
+}
+
+.kanni-line-origin {
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+  color: var(--k-text-ghost);
+  font-weight: 500;
+}
+
+.kanni-diff-line.addition .kanni-line-origin {
+  color: var(--k-accent);
+}
+
+.kanni-diff-line.deletion .kanni-line-origin {
+  color: var(--k-danger);
+}
+
+.kanni-line-content {
+  flex: 1;
+  padding-right: 10px;
+  padding-left: 2px;
+}
+
+.kanni-diff-area {
+  overflow-y: auto;
+  max-height: 55vh;
+}
+
+/* ── Activity Stream ─────────────────────────────────────────── */
+
+.kanni-activity {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kanni-activity-entry {
+  border-radius: var(--k-radius-sm);
+  transition: background var(--k-duration) var(--k-ease);
+}
+
+.kanni-activity-entry:hover {
+  background: var(--k-surface-1);
+}
+
+.kanni-activity-entry-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 8px;
+}
+
+.kanni-activity-icon {
+  font-size: 10px;
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+  color: var(--k-text-dim);
+}
+
+/* Type-specific icon colors */
+.kanni-activity-entry.type-files_changed .kanni-activity-icon {
+  color: var(--k-warning);
+}
+
+.kanni-activity-entry.type-commit .kanni-activity-icon {
+  color: var(--k-accent);
+}
+
+.kanni-activity-entry.type-branch_switched .kanni-activity-icon {
+  color: var(--k-purple);
+}
+
+.kanni-activity-entry.type-repo_status .kanni-activity-icon {
+  color: var(--k-info);
+}
+
+.kanni-activity-time {
+  color: var(--k-text-ghost);
+  font-size: 10px;
+  font-weight: 400;
+  flex-shrink: 0;
+  width: 52px;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.kanni-activity-repo {
+  color: var(--k-accent);
+  font-weight: 500;
+  flex-shrink: 0;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  cursor: pointer;
+  transition: opacity var(--k-duration) var(--k-ease);
+}
+
+.kanni-activity-repo:hover {
+  opacity: 0.8;
+}
+
+.kanni-activity-summary {
+  color: var(--k-text-secondary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 300;
+}
+
+.kanni-activity-toggle {
+  background: none;
+  border: none;
+  color: var(--k-text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  padding: 0 4px;
+  flex-shrink: 0;
+  transition: color var(--k-duration) var(--k-ease);
+}
+
+.kanni-activity-toggle:hover {
+  color: var(--k-text);
+}
+
+/* Expandable file list */
+.kanni-activity-files {
+  padding: 2px 8px 6px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.kanni-activity-file {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--k-text-secondary);
+  padding: 2px 6px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background var(--k-duration) var(--k-ease),
+              color var(--k-duration) var(--k-ease);
+}
+
+.kanni-activity-file:hover {
+  background: var(--k-accent-soft);
+  color: var(--k-accent);
+}
+
+/* Detail line (commit info, branch transition) */
+.kanni-activity-detail {
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--k-text-dim);
+  padding: 0 8px 4px 30px;
+  letter-spacing: 0.02em;
+}
+
+/* ── Commit Form ─────────────────────────────────────────────── */
+
 .kanni-commit-area {
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--kanni-border);
+  margin-top: var(--k-gap-sm);
+  padding-top: var(--k-gap-sm);
+  border-top: 1px solid var(--k-border);
 }
 
 .kanni-commit-form form {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 6px;
 }
 
 .kanni-commit-input {
-  background: var(--kanni-surface);
-  border: 1px solid var(--kanni-border);
-  color: var(--kanni-text);
-  border-radius: 4px;
-  padding: 0.4rem 0.5rem;
+  background: var(--k-surface-1);
+  border: 1px solid var(--k-border-strong);
+  color: var(--k-text);
+  border-radius: var(--k-radius-md);
+  padding: 8px 10px;
   font-family: inherit;
-  font-size: 0.75rem;
+  font-size: 12px;
+  font-weight: 400;
   outline: none;
   resize: vertical;
   min-height: 2.5rem;
+  transition: border-color var(--k-duration) var(--k-ease),
+              box-shadow var(--k-duration) var(--k-ease);
+  line-height: 1.5;
+}
+
+.kanni-commit-input::placeholder {
+  color: var(--k-text-ghost);
+  font-weight: 300;
 }
 
 .kanni-commit-input:focus {
-  border-color: var(--kanni-accent);
+  border-color: var(--k-accent);
+  box-shadow: 0 0 0 2px var(--k-accent-soft),
+              0 0 16px var(--k-accent-glow);
 }
 
 .kanni-commit-actions {
   display: flex;
-  gap: 0.4rem;
-}
-
-.kanni-btn-sm {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.7rem;
-}
-
-.kanni-btn-secondary {
-  background: var(--kanni-surface);
-  color: var(--kanni-text);
-  border: 1px solid var(--kanni-border);
-}
-
-.kanni-btn-secondary:hover {
-  border-color: var(--kanni-accent);
-  opacity: 1;
-}
-
-.kanni-commit-result {
-  font-size: 0.7rem;
-  padding: 0.3rem 0;
-}
-
-.kanni-commit-result.success { color: var(--kanni-accent); }
-.kanni-commit-result.error { color: #ff6b6b; }
-
-.kanni-input {
-  background: var(--kanni-surface);
-  border: 1px solid var(--kanni-border);
-  color: var(--kanni-text);
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
-  font-family: ui-monospace, monospace;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-.kanni-input:focus {
-  border-color: var(--kanni-accent);
-  box-shadow: 0 0 0 2px var(--kanni-accent-dim);
+  gap: 6px;
 }
 
 .kanni-btn {
-  background: var(--kanni-accent);
-  color: var(--kanni-bg);
+  background: var(--k-accent);
+  color: var(--k-void);
   font-weight: 600;
-  padding: 0.5rem 1.25rem;
-  border-radius: 6px;
+  font-size: 12px;
+  padding: 6px 16px;
+  border-radius: var(--k-radius-md);
   border: none;
   cursor: pointer;
-  transition: opacity 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  transition: opacity var(--k-duration) var(--k-ease),
+              transform 80ms ease,
+              box-shadow var(--k-duration) var(--k-ease);
 }
 
 .kanni-btn:hover {
-  opacity: 0.85;
+  opacity: 0.9;
+  box-shadow: 0 0 16px var(--k-accent-soft);
+}
+
+.kanni-btn:active {
+  transform: scale(0.98);
 }
 
 .kanni-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+.kanni-btn-sm {
+  padding: 4px 12px;
+  font-size: 11px;
+}
+
+.kanni-btn-secondary {
+  background: var(--k-surface-2);
+  color: var(--k-text-secondary);
+  border: 1px solid var(--k-border-strong);
+}
+
+.kanni-btn-secondary:hover {
+  border-color: var(--k-border-accent);
+  color: var(--k-text);
+  opacity: 1;
+  box-shadow: none;
+}
+
+.kanni-commit-result {
+  font-size: 11px;
+  padding: 4px 0;
+  font-weight: 500;
+}
+
+.kanni-commit-result.success {
+  color: var(--k-accent);
+}
+
+.kanni-commit-result.error {
+  color: var(--k-danger);
+}
+
+/* ── Generic input (reserved for future use; not currently rendered) ── */
+
+.kanni-input {
+  background: var(--k-surface-1);
+  border: 1px solid var(--k-border-strong);
+  color: var(--k-text);
+  border-radius: var(--k-radius-md);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  transition: border-color var(--k-duration) var(--k-ease),
+              box-shadow var(--k-duration) var(--k-ease);
+}
+
+.kanni-input:focus {
+  border-color: var(--k-accent);
+  box-shadow: 0 0 0 2px var(--k-accent-soft);
 }

@@ -96,7 +96,7 @@ defmodule Kanni.Repo.Worker do
 
   def initializing(:internal, :open, data) do
     case Kanni.Git.Native.repo_open(data.path) do
-      {:ok, handle} ->
+      handle when is_reference(handle) ->
         data = %{data | handle: handle, status: :idle}
         Kanni.Watcher.Handler.watch_repo(data.path)
         {:next_state, :idle, data, [{:next_event, :internal, :refresh}]}

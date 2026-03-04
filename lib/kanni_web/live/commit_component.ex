@@ -15,18 +15,7 @@ defmodule KanniWeb.CommitComponent do
     if socket.assigns.pushing do
       {:ok, socket}
     else
-      socket = assign(socket, pushing: true, result: nil)
-
-      case Kanni.Git.CLI.push(socket.assigns.repo_path) do
-        {:ok, _} ->
-          send(self(), {:push_completed, socket.assigns.repo_path})
-          send(self(), {:flash, :info, "Pushed to origin"})
-          {:ok, assign(socket, pushing: false, result: {:ok, "Pushed"})}
-
-        {:error, {msg, _}} ->
-          send(self(), {:flash, :error, "Push failed: #{msg}"})
-          {:ok, assign(socket, pushing: false, result: {:error, "Push failed: #{msg}"})}
-      end
+      {:ok, do_push(socket)}
     end
   end
 
@@ -111,17 +100,21 @@ defmodule KanniWeb.CommitComponent do
   end
 
   def handle_event("push", _params, socket) do
+    {:noreply, do_push(socket)}
+  end
+
+  defp do_push(socket) do
     socket = assign(socket, pushing: true, result: nil)
 
     case Kanni.Git.CLI.push(socket.assigns.repo_path) do
       {:ok, _} ->
         send(self(), {:push_completed, socket.assigns.repo_path})
         send(self(), {:flash, :info, "Pushed to origin"})
-        {:noreply, assign(socket, pushing: false, result: {:ok, "Pushed"})}
+        assign(socket, pushing: false, result: {:ok, "Pushed"})
 
       {:error, {msg, _}} ->
         send(self(), {:flash, :error, "Push failed: #{msg}"})
-        {:noreply, assign(socket, pushing: false, result: {:error, "Push failed: #{msg}"})}
+        assign(socket, pushing: false, result: {:error, "Push failed: #{msg}"})
     end
   end
 end

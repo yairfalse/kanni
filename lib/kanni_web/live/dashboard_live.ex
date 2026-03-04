@@ -164,9 +164,13 @@ defmodule KanniWeb.DashboardLive do
     {:noreply, push_event(socket, "focus-commit-input", %{})}
   end
 
-  def handle_event("key:push", _params, socket) do
+  def handle_event("key:push", %{"confirmed" => true}, socket) do
     send_update(KanniWeb.CommitComponent, id: "commit-form", action: :push)
     {:noreply, socket}
+  end
+
+  def handle_event("key:push", _params, socket) do
+    {:noreply, push_event(socket, "confirm-push", %{})}
   end
 
   def handle_event("switch_tab", %{"tab" => tab}, socket) do
@@ -203,13 +207,19 @@ defmodule KanniWeb.DashboardLive do
   end
 
   def handle_info({:file_selected, file_path, repo_path}, socket) do
-    file_context =
-      case Kanni.Context.get_file_context(Path.join(repo_path, file_path)) do
-        {:ok, ctx} -> ctx
-        _ -> nil
-      end
+    full_path = Path.join(repo_path, file_path) |> Path.expand()
 
-    {:noreply, assign(socket, file_context: file_context, selected_file_path: file_path)}
+    if String.starts_with?(full_path, Path.expand(repo_path) <> "/") do
+      file_context =
+        case Kanni.Context.get_file_context(full_path) do
+          {:ok, ctx} -> ctx
+          _ -> nil
+        end
+
+      {:noreply, assign(socket, file_context: file_context, selected_file_path: file_path)}
+    else
+      {:noreply, socket}
+    end
   end
 
   def handle_info({:push_completed, path}, socket) do

@@ -41,6 +41,12 @@ const KeyboardHook = {
       const input = document.querySelector(".kanni-commit-input")
       if (input) input.focus()
     })
+
+    this.handleEvent("confirm-push", () => {
+      if (confirm("Push to origin?")) {
+        this.pushEvent("key:push", { confirmed: true })
+      }
+    })
   },
 
   destroyed() {

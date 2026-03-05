@@ -24,6 +24,11 @@ defmodule Kanni.Watcher.Handler do
     GenServer.call(__MODULE__, {:unwatch, path})
   end
 
+  @doc "List all active watchers as `{path, pid}` pairs."
+  def list_watchers do
+    GenServer.call(__MODULE__, :list_watchers)
+  end
+
   @impl true
   def init(_opts) do
     {:ok, %{watchers: %{}, debounce_timers: %{}}}
@@ -46,6 +51,10 @@ defmodule Kanni.Watcher.Handler do
           {:reply, {:error, reason}, state}
       end
     end
+  end
+
+  def handle_call(:list_watchers, _from, state) do
+    {:reply, {:ok, state.watchers}, state}
   end
 
   def handle_call({:unwatch, path}, _from, state) do

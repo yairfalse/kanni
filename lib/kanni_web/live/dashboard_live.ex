@@ -21,6 +21,7 @@ defmodule KanniWeb.DashboardLive do
     if connected?(socket) do
       Phoenix.PubSub.subscribe(Kanni.PubSub, "repos")
       Phoenix.PubSub.subscribe(Kanni.PubSub, "file_events")
+      Phoenix.PubSub.subscribe(Kanni.PubSub, "agents")
     end
 
     repos = Kanni.Workspace.list_repos()
@@ -48,7 +49,9 @@ defmodule KanniWeb.DashboardLive do
        file_context: nil,
        selected_file_path: nil,
        kerto_status: Kanni.Context.status(),
-       plugin_panels: collect_plugin_panels()
+       plugin_panels: collect_plugin_panels(),
+     agents: Kanni.Status.agents(),
+     agent_summary: Kanni.Status.agent_summary()
      )}
   end
 
@@ -72,6 +75,18 @@ defmodule KanniWeb.DashboardLive do
       <div class="kanni-header">
         <span class="kanni-logo">Känni</span>
         <span class="kanni-tagline">context exchange surface</span>
+        <span
+          class="kanni-header-indicators"
+          phx-click="switch_tab"
+          phx-value-tab="status"
+        >
+          <span :if={@agent_summary.total > 0} class={"kanni-indicator #{if @agent_summary.active > 0, do: "active", else: "ok"}"}>
+            {@agent_summary.total} {if @agent_summary.total == 1, do: "agent", else: "agents"}
+          </span>
+          <span :if={@agent_summary.total == 0} class="kanni-indicator ok">
+            no agents
+          </span>
+        </span>
       </div>
       <div class="kanni-panels">
         <.repos_panel repos={@repos} selected_path={@selected_path} />
@@ -106,6 +121,13 @@ defmodule KanniWeb.DashboardLive do
               entries={@activity}
             />
           </:activity>
+          <:status>
+            <.live_component
+              module={KanniWeb.StatusComponent}
+              id="status"
+              agents={@agents}
+            />
+          </:status>
         </.focus_panel>
 
         <.context_panel
@@ -244,6 +266,10 @@ defmodule KanniWeb.DashboardLive do
     {:noreply, assign(socket, activity: activity)}
   end
 
+  def handle_info({:agents_changed, agents}, socket) do
+    {:noreply, assign(socket, agents: agents, agent_summary: Kanni.Status.agent_summary())}
+  end
+
   def handle_info({:repo_state_changed, repo_state}, socket) do
     repos = update_repo_in_list(socket.assigns.repos, repo_state)
 
@@ -254,7 +280,12 @@ defmodule KanniWeb.DashboardLive do
 
     activity = Activity.prepend(socket.assigns.activity, change_entries)
 
-    socket = assign(socket, repos: repos, activity: activity, prev_repo_states: prev_states)
+    socket =
+      assign(socket,
+        repos: repos,
+        activity: activity,
+        prev_repo_states: prev_states
+      )
 
     socket =
       if socket.assigns.selected_path == repo_state.path do

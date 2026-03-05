@@ -30,6 +30,8 @@ defmodule KanniWeb.DashboardLive do
     prev_states =
       Map.new(repos, fn r -> {r.path, r} end)
 
+    agents = Kanni.Status.agents()
+
     {:ok,
      assign(socket,
        page_title: "Känni",
@@ -50,8 +52,8 @@ defmodule KanniWeb.DashboardLive do
        selected_file_path: nil,
        kerto_status: Kanni.Context.status(),
        plugin_panels: collect_plugin_panels(),
-     agents: Kanni.Status.agents(),
-     agent_summary: Kanni.Status.agent_summary()
+     agents: agents,
+     agent_summary: Kanni.Status.agent_summary(agents)
      )}
   end
 
@@ -267,7 +269,7 @@ defmodule KanniWeb.DashboardLive do
   end
 
   def handle_info({:agents_changed, agents}, socket) do
-    {:noreply, assign(socket, agents: agents, agent_summary: Kanni.Status.agent_summary())}
+    {:noreply, assign(socket, agents: agents, agent_summary: Kanni.Status.agent_summary(agents))}
   end
 
   def handle_info({:repo_state_changed, repo_state}, socket) do

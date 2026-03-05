@@ -76,9 +76,13 @@ defmodule Kanni.Plugins.ClaudeDetector do
     else
       _ -> []
     end
+  catch
+    :throw, :not_found -> []
   end
 
   defp find_claude_pids do
+    unless System.find_executable("ps"), do: throw(:not_found)
+
     case System.cmd("ps", ["-eo", "pid,state,comm"], stderr_to_stdout: true) do
       {output, 0} ->
         pids =
@@ -108,13 +112,15 @@ defmodule Kanni.Plugins.ClaudeDetector do
   defp resolve_working_dirs([]), do: {:ok, []}
 
   defp resolve_working_dirs(pids_with_state) do
+    unless System.find_executable("lsof"), do: throw(:not_found)
+
     pid_strs = Enum.map(pids_with_state, fn {pid, _} -> Integer.to_string(pid) end)
     state_map = Map.new(pids_with_state)
 
     case System.cmd("lsof", ["-p", Enum.join(pid_strs, ","), "-d", "cwd", "-Fn"],
            stderr_to_stdout: true
          ) do
-      {output, _} ->
+      {output, 0} ->
         agents =
           output
           |> parse_lsof_output()
@@ -159,8 +165,8 @@ defmodule Kanni.Plugins.ClaudeDetector do
   end
 
   defp agents_changed?(old, new) do
-    old_set = MapSet.new(old, &{&1.pid, &1.active})
-    new_set = MapSet.new(new, &{&1.pid, &1.active})
+    old_set = MapSet.new(old, &{&1.pid, &1.active, &1.repo_path, &1.name})
+    new_set = MapSet.new(new, &{&1.pid, &1.active, &1.repo_path, &1.name})
     old_set != new_set
   end
 

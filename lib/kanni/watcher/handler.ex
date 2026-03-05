@@ -24,7 +24,7 @@ defmodule Kanni.Watcher.Handler do
     GenServer.call(__MODULE__, {:unwatch, path})
   end
 
-  @doc "List all active watchers as `{path, pid}` pairs."
+  @doc "List all active watchers as a `%{path => pid}` map."
   def list_watchers do
     GenServer.call(__MODULE__, :list_watchers)
   end

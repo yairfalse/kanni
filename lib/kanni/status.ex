@@ -4,6 +4,8 @@ defmodule Kanni.Status do
   that aggregate agent state from detector plugins.
   """
 
+  require Logger
+
   @doc "Returns all detected agents across all detector plugins."
   def agents do
     Kanni.Plugin.Registry.agent_detectors()
@@ -11,16 +13,17 @@ defmodule Kanni.Status do
       try do
         mod.detect_agents()
       rescue
-        _ -> []
+        e ->
+          Logger.warning("Agent detector #{inspect(mod)} failed: #{Exception.message(e)}")
+          []
       end
     end)
     |> Enum.sort_by(&{!&1.active, &1.repo_path})
   end
 
-  @doc "Summary counts for header display."
-  def agent_summary do
-    all = agents()
-    active = Enum.count(all, & &1.active)
-    %{total: length(all), active: active, idle: length(all) - active}
+  @doc "Summary counts from a pre-fetched agents list."
+  def agent_summary(agents) do
+    active = Enum.count(agents, & &1.active)
+    %{total: length(agents), active: active, idle: length(agents) - active}
   end
 end

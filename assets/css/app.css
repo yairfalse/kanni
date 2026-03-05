@@ -1057,3 +1057,110 @@ html, body {
   border-color: var(--k-accent);
   box-shadow: 0 0 0 2px var(--k-accent-soft);
 }
+
+/* ── Header Indicators ──────────────────────────────────────── */
+
+.kanni-header-indicators {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  transition: opacity var(--k-duration) var(--k-ease);
+}
+
+.kanni-indicator {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: color var(--k-duration) var(--k-ease);
+}
+
+.kanni-indicator.ok {
+  color: var(--k-text-dim);
+}
+
+.kanni-header-indicators:hover .kanni-indicator.ok {
+  color: var(--k-text-secondary);
+}
+
+.kanni-indicator.error {
+  color: var(--k-warning);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+/* ── Status View / Agent Detection ──────────────────────────── */
+
+.kanni-status {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kanni-status-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  font-size: 12px;
+}
+
+.kanni-status-key {
+  font-weight: 500;
+  color: var(--k-text);
+}
+
+.kanni-status-val {
+  color: var(--k-text-dim);
+  font-weight: 300;
+}
+
+.kanni-status-dot.dim {
+  background: var(--k-text-ghost);
+}
+
+.kanni-agent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  font-size: 12px;
+  border-radius: var(--k-radius-sm);
+  transition: background var(--k-duration) var(--k-ease);
+}
+
+.kanni-agent-row.clickable {
+  cursor: pointer;
+}
+
+.kanni-agent-row.clickable:hover {
+  background: var(--k-surface-1);
+}
+
+.kanni-agent-repo {
+  font-weight: 500;
+  color: var(--k-text);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kanni-agent-name {
+  color: var(--k-text-dim);
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.kanni-agent-state {
+  color: var(--k-text-dim);
+  font-weight: 400;
+  font-size: 11px;
+}
+
+.kanni-agent-state.active {
+  color: var(--k-accent);
+}
+
+.kanni-indicator.active {
+  color: var(--k-accent);
+}

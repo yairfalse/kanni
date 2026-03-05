@@ -29,6 +29,7 @@ defmodule Kanni.Plugin.Registry do
   def event_consumers, do: providers_for(:event_consumer)
   def action_providers, do: providers_for(:action_provider)
   def panel_providers, do: providers_for(:panel_provider)
+  def agent_detectors, do: providers_for(:agent_detector)
 
   defp providers_for(capability) do
     case :ets.lookup(@table, {:capability, capability}) do
@@ -69,7 +70,7 @@ defmodule Kanni.Plugin.Registry do
   defp index_plugins(plugins) do
     :ets.insert(@table, {:plugins, plugins})
 
-    for capability <- [:context_provider, :event_consumer, :action_provider, :panel_provider] do
+    for capability <- [:context_provider, :event_consumer, :action_provider, :panel_provider, :agent_detector] do
       matching = Enum.filter(plugins, fn mod -> capability in mod.capabilities() end)
       :ets.insert(@table, {{:capability, capability}, matching})
     end

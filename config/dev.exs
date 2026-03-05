@@ -74,7 +74,7 @@ config :phoenix, :plug_init_mode, :runtime
 config :kanni,
   workspace_roots: ["~/projects"],
   scan_depth: 1,
-  plugins: []
+  plugins: [Kanni.Plugins.ClaudeDetector]
 
 config :phoenix_live_view,
   # Include debug annotations and locations in rendered markup.
